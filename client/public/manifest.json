@@ -1,0 +1,16 @@
+{
+  "name": "IPC Tareas",
+  "short_name": "IPC Tareas",
+  "description": "Gestión de tareas personal",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#1e1b4b",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
