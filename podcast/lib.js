@@ -87,7 +87,7 @@ function table(widths, rows, o = {}) {
         return cell(spec.t ?? '', {
           noBorders: o.noBorders,
           w: widths[j], head,
-          fill: head ? ACC : (spec.fill || (isTot ? LIGHT : (i % 2 === 0 && o.zebra ? GREY : undefined))),
+          fill: head ? (o.headFill || ACC) : (spec.fill || (isTot ? LIGHT : (i % 2 === 0 && o.zebra ? GREY : undefined))),
           bold: head || isTot || spec.bold,
           italics: spec.italics,
           color: spec.color,
