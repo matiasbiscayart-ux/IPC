@@ -1,0 +1,6 @@
+/home/user/IPC/podcast/assets/set_scene.py:24: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m = bpy.data.materials.new(name); m.use_nodes = True
+/home/user/IPC/podcast/assets/set_scene.py:336: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  world.use_nodes = True
+03:31.652  render           | Saved: '/home/user/IPC/podcast/assets/set-plano-general.png'
+RENDER OK -> /home/user/IPC/podcast/assets/set-plano-general.png

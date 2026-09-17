@@ -10,6 +10,7 @@ const FONT = 'Calibri';
 const noBorder = { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' };
 const cellBorder = { style: BorderStyle.SINGLE, size: 2, color: 'BFBFBF' };
 const B4 = { top: cellBorder, bottom: cellBorder, left: cellBorder, right: cellBorder };
+const NOB = { top: noBorder, bottom: noBorder, left: noBorder, right: noBorder };
 
 function run(text, o = {}) {
   return new TextRun({ text: String(text), font: FONT, size: o.size || 18,
@@ -62,7 +63,7 @@ function cell(content, o = {}) {
     shading: o.fill ? { type: ShadingType.CLEAR, color: 'auto', fill: o.fill } : undefined,
     margins: { top: 40, bottom: 40, left: 90, right: 90 },
     verticalAlign: VerticalAlign.CENTER,
-    columnSpan: o.span, borders: B4,
+    columnSpan: o.span, borders: o.noBorders ? NOB : B4,
   });
 }
 
@@ -75,7 +76,16 @@ function table(widths, rows, o = {}) {
       children: r.map((c, j) => {
         const spec = (c && typeof c === 'object' && !Array.isArray(c)) ? c : { t: c };
         const isTot = spec.total || (o.totalRows || []).includes(i);
+        if (spec.kids) return new TableCell({
+          children: spec.kids,
+          width: { size: widths[j], type: WidthType.DXA },
+          shading: spec.fill ? { type: ShadingType.CLEAR, color: 'auto', fill: spec.fill } : undefined,
+          margins: { top: 40, bottom: 40, left: 90, right: 90 },
+          verticalAlign: VerticalAlign.CENTER,
+          borders: o.noBorders ? NOB : B4,
+        });
         return cell(spec.t ?? '', {
+          noBorders: o.noBorders,
           w: widths[j], head,
           fill: head ? ACC : (spec.fill || (isTot ? LIGHT : (i % 2 === 0 && o.zebra ? GREY : undefined))),
           bold: head || isTot || spec.bold,

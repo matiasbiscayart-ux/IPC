@@ -93,339 +93,339 @@ M_MAPBG   = mat("mapa_fondo",     (0.900,0.880,0.830), rough=0.85)
 M_MAPLAND = mat("mapa_tierra",    (0.640,0.400,0.250), rough=0.88)
 
 # ───────────────────────── dimensiones de la sala ─────────────────────────
-# X: ancho (-2.30 .. 2.30) = 4.60 m   |  Y: profundidad (-2.60 .. 1.80) = 4.40 m
-# Z: altura 0 .. 2.75 m
-X0, X1 = -2.30, 2.30
-Y0, Y1 = -2.60, 1.80
-ZH     = 2.75
-T      = 0.10   # espesor muros
+# Modelada sobre la SEGUNDA foto de la oficina (la sala chica).
+# X: ancho  -1.85 .. 1.85  = 3.70 m
+# Y: fondo  -2.10 .. 2.10  = 4.20 m   (Y+ = pared del fondo, la del mapa y la biblioteca)
+# Z: altura 0 .. 2.85 m
+X0, X1 = -1.85, 1.85
+Y0, Y1 = -2.10, 2.10
+ZH     = 2.85
+T      = 0.10
 
-box("piso",      (X1-X0, Y1-Y0, T), ((X0+X1)/2, (Y0+Y1)/2, -T/2), material=M_FLOOR)
-box("cielorraso",(X1-X0, Y1-Y0, T), ((X0+X1)/2, (Y0+Y1)/2, ZH+T/2), material=M_CEIL)
-box("pared_fondo",(X1-X0, T, ZH),   ((X0+X1)/2, Y1+T/2, ZH/2), material=M_WALL)
-box("pared_der", (T, Y1-Y0, ZH),    (X1+T/2, (Y0+Y1)/2, ZH/2), material=M_WALL)
-box("pared_atras",(X1-X0, T, ZH),   ((X0+X1)/2, Y0-T/2, ZH/2), material=M_WALL)
+M_FLOOR_R = mat("piso_oficina", (0.235, 0.250, 0.252), rough=0.28)   # cemento alisado gris verdoso
+M_CARDB   = mat("carton",       (0.430, 0.310, 0.185), rough=0.92)
+M_BLUEBOX = mat("caja_azul",    (0.055, 0.115, 0.330), rough=0.55)
+M_MAPSEA  = mat("mapa_oceano",  (0.400, 0.585, 0.720), rough=0.90)
+M_SIGN    = mat("cartel_rojo",  (0.480, 0.045, 0.045), rough=0.80, emit=(0.480,0.045,0.045), emit_str=1.6)
 
-# panel de acento navy detras del set
-box("panel_acento", (2.05, 0.035, 2.30), (-0.62, Y1-0.02, 1.28), material=M_WALL_AC)
+box("piso",        (X1-X0, Y1-Y0, T), ((X0+X1)/2, (Y0+Y1)/2, -T/2), material=M_FLOOR_R)
+box("cielorraso",  (X1-X0, Y1-Y0, T), ((X0+X1)/2, (Y0+Y1)/2, ZH+T/2), material=M_CEIL)
+box("pared_fondo", (X1-X0, T, ZH),    ((X0+X1)/2, Y1+T/2, ZH/2), material=M_WALL)
+box("pared_der",   (T, Y1-Y0, ZH),    (X1+T/2, (Y0+Y1)/2, ZH/2), material=M_WALL)
+box("pared_atras", (X1-X0, T, ZH),    ((X0+X1)/2, Y0-T/2, ZH/2), material=M_WALL)
+# zocalo metalico del fondo, como el de la foto
+box("zocalo", (X1-X0, 0.04, 0.09), ((X0+X1)/2, Y1-0.02, 0.045), material=M_ALU)
 
-# ── pared izquierda con ventanal (marco de aluminio gris, como el de la oficina)
-WIN_Y0, WIN_Y1 = -1.55, 1.25      # extension del ventanal
-WIN_Z0, WIN_Z1 = 0.42, 2.42
-box("pared_izq_inf", (T, Y1-Y0, WIN_Z0),        (X0-T/2, (Y0+Y1)/2, WIN_Z0/2), material=M_WALL)
-box("pared_izq_sup", (T, Y1-Y0, ZH-WIN_Z1),     (X0-T/2, (Y0+Y1)/2, (WIN_Z1+ZH)/2), material=M_WALL)
-box("pared_izq_a",   (T, WIN_Y0-Y0, WIN_Z1-WIN_Z0), (X0-T/2, (Y0+WIN_Y0)/2, (WIN_Z0+WIN_Z1)/2), material=M_WALL)
-box("pared_izq_b",   (T, Y1-WIN_Y1, WIN_Z1-WIN_Z0), (X0-T/2, (WIN_Y1+Y1)/2, (WIN_Z0+WIN_Z1)/2), material=M_WALL)
+# ── pared izquierda: ventanal industrial de marco gris con grilla fina ──
+WY0, WY1 = -1.35, 1.70
+WZ0, WZ1 = 0.46, 2.46
+box("pizq_inf", (T, Y1-Y0, WZ0),      (X0-T/2, (Y0+Y1)/2, WZ0/2), material=M_WALL)
+box("pizq_sup", (T, Y1-Y0, ZH-WZ1),   (X0-T/2, (Y0+Y1)/2, (WZ1+ZH)/2), material=M_WALL)
+box("pizq_a",   (T, WY0-Y0, WZ1-WZ0), (X0-T/2, (Y0+WY0)/2, (WZ0+WZ1)/2), material=M_WALL)
+box("pizq_b",   (T, Y1-WY1, WZ1-WZ0), (X0-T/2, (WY1+Y1)/2, (WZ0+WZ1)/2), material=M_WALL)
 
-# marco y parteluces
-for yy in (WIN_Y0, -0.60, 0.30, WIN_Y1):
-    box("mullion", (0.09, 0.055, WIN_Z1-WIN_Z0), (X0-0.04, yy, (WIN_Z0+WIN_Z1)/2), material=M_ALU)
-for zz in (WIN_Z0, 1.62, WIN_Z1):
-    box("travesano", (0.09, WIN_Y1-WIN_Y0, 0.055), (X0-0.04, (WIN_Y0+WIN_Y1)/2, zz), material=M_ALU)
-box("vidrio", (0.02, WIN_Y1-WIN_Y0, WIN_Z1-WIN_Z0), (X0-0.04, (WIN_Y0+WIN_Y1)/2, (WIN_Z0+WIN_Z1)/2), material=M_GLASS)
+box("vidrio", (0.02, WY1-WY0, WZ1-WZ0), (X0-0.045, (WY0+WY1)/2, (WZ0+WZ1)/2), material=M_GLASS)
+NV, NH = 7, 6                                    # grilla de paños, como la carpinteria real
+for i in range(NV + 1):
+    y = WY0 + (WY1 - WY0) * i / NV
+    box(f"mull_v{i}", (0.085, 0.042, WZ1-WZ0), (X0-0.042, y, (WZ0+WZ1)/2), material=M_ALU)
+for j in range(NH + 1):
+    z = WZ0 + (WZ1 - WZ0) * j / NH
+    box(f"mull_h{j}", (0.085, WY1-WY0, 0.042), (X0-0.042, (WY0+WY1)/2, z), material=M_ALU)
+box("marco_v0", (0.13, 0.09, WZ1-WZ0+0.09), (X0-0.04, WY0, (WZ0+WZ1)/2), material=M_ALU)
+box("marco_v1", (0.13, 0.09, WZ1-WZ0+0.09), (X0-0.04, WY1, (WZ0+WZ1)/2), material=M_ALU)
 
-# exterior: cielo y edificio de enfrente
-plane("cielo", (9, 9), (X0-3.2, 0.0, 1.5), rot=(0, math.radians(90), 0), material=M_CITY)
-for i in range(7):
-    for j in range(5):
-        box(f"vent_{i}_{j}", (0.05, 0.34, 0.30),
-            (X0-2.55, -1.9+i*0.62, 0.55+j*0.55), material=M_BLDG)
+# exterior: edificio de enfrente con su grilla de ventanas y equipos de aire
+plane("cielo", (11, 11), (X0-4.0, 0.2, 1.6), rot=(0, math.radians(90), 0), material=M_CITY)
+random.seed(11)
+for i in range(9):
+    for j in range(7):
+        box(f"ext_v{i}_{j}", (0.05, 0.30, 0.34), (X0-2.9, -2.3+i*0.58, 0.40+j*0.46), material=M_BLDG)
+        if random.random() < 0.28:
+            box(f"ext_ac{i}_{j}", (0.14, 0.17, 0.15), (X0-2.78, -2.3+i*0.58, 0.28+j*0.46), material=M_ALU)
+box("cartel_calle", (0.06, 1.15, 0.30), (X0-2.86, 0.55, 0.30), material=M_SIGN)
 
-# cortina pesada (corrida a medias, del lado del set)
-box("cortina", (0.075, 1.15, ZH-0.12), (X0+0.14, 0.72, (ZH-0.12)/2+0.05), material=M_CURTAIN)
-box("riel", (0.05, WIN_Y1-WIN_Y0+0.35, 0.05), (X0+0.14, (WIN_Y0+WIN_Y1)/2, ZH-0.10), material=M_ALU)
+# cortina pesada, corrida a medias del lado del set
+box("cortina", (0.075, 1.05, ZH-0.14), (X0+0.15, 1.35, (ZH-0.14)/2+0.06), material=M_CURTAIN)
+box("riel", (0.05, WY1-WY0+0.30, 0.05), (X0+0.15, (WY0+WY1)/2, ZH-0.11), material=M_ALU)
 
-# ───────────────────────── backdrop: biblioteca + mapa ─────────────────────────
-SX, SY = 1.30, Y1-0.23
-BW, BD, BH = 1.10, 0.38, 2.10
-box("bib_fondo",  (BW, 0.028, BH), (SX, SY+BD/2-0.014, BH/2), material=M_WHITE)
-box("bib_lat_i",  (0.03, BD, BH),  (SX-BW/2+0.015, SY, BH/2), material=M_WHITE)
-box("bib_lat_d",  (0.03, BD, BH),  (SX+BW/2-0.015, SY, BH/2), material=M_WHITE)
-box("bib_techo",  (BW, BD, 0.032), (SX, SY, BH-0.016), material=M_WHITE)
-box("bib_piso",   (BW, BD, 0.032), (SX, SY, 0.016), material=M_WHITE)
-SHELVES = (0.46, 0.90, 1.34)
-for i, z in enumerate(SHELVES):
-    box(f"estante_{i}", (BW-0.06, BD-0.02, 0.028), (SX, SY, z), material=M_WHITE)
-box("bib_puerta", (BW-0.05, 0.028, 0.58), (SX, SY-BD/2+0.02, 1.76), material=M_WHITE)
-cyl("bib_tirador", 0.008, 0.16, (SX, SY-BD/2, 1.76), rot=(0,math.radians(90),0), material=M_ALU)
+# ───────────────── backdrop: panel navy portatil + mapamundi + biblioteca ─────────────────
+# El panel NO es pintura sobre la pared: es un panel con pie, se arma y se guarda.
+PX, PW, PH = -0.72, 1.58, 2.12
+box("panel_navy", (PW, 0.055, PH), (PX, Y1-0.12, PH/2 + 0.05), material=M_WALL_AC)
+for sx in (-1, 1):
+    cyl(f"panel_pie{sx}", 0.030, 0.10, (PX + sx*0.62, Y1-0.24, 0.05), rot=(math.radians(90),0,0), material=M_BLACK)
+    box(f"panel_pata{sx}", (0.05, 0.30, 0.04), (PX + sx*0.62, Y1-0.26, 0.02), material=M_BLACK)
 
-# libros sobre los estantes (al frente, visibles)
-for i, z in enumerate(SHELVES):
-    x = SX - BW/2 + 0.06
-    while x < SX + BW/2 - 0.12:
-        w = random.uniform(0.030, 0.058); h = random.uniform(0.20, 0.31)
-        c = random.choice([(0.28,0.045,0.035),(0.035,0.075,0.185),(0.050,0.140,0.075),
-                           (0.330,0.215,0.055),(0.085,0.085,0.098),(0.380,0.310,0.220)])
-        box(f"libro_{i}_{x:.2f}", (w, 0.21, h), (x+w/2, SY-0.055, z+0.014+h/2),
-            rot=(0,0,random.uniform(-0.025,0.025)), material=mat("lib", c, rough=0.78))
-        x += w + random.uniform(0.002, 0.010)
+# mapamundi (el que ya esta en la pared), montado sobre el panel
+MW, MH = 1.34, 0.84
+box("mapa_base", (MW, 0.016, MH), (PX, Y1-0.152, 1.58), material=M_MAPSEA)
+random.seed(31)
+ROJO, OCRE, VERDE, TIERRA, OLIVA = ((0.60,0.17,0.07),(0.70,0.45,0.10),(0.20,0.40,0.13),(0.46,0.24,0.08),(0.40,0.46,0.13))
+# cada continente es un racimo de bloques superpuestos: forma irregular, no un rectangulo
+CLUSTERS = [((-0.44,  0.18), 0.15, 0.11,  9, OCRE),    # Norteamerica
+            ((-0.32, -0.17), 0.06, 0.14,  8, VERDE),   # Sudamerica
+            ((-0.03,  0.24), 0.09, 0.06,  6, ROJO),    # Europa
+            (( 0.03, -0.09), 0.08, 0.14,  9, TIERRA),  # Africa
+            (( 0.30,  0.19), 0.18, 0.11, 12, OLIVA),   # Asia
+            (( 0.50, -0.26), 0.07, 0.04,  5, ROJO)]    # Oceania
+for ci, ((cx, cz), rx, rz, n, col) in enumerate(CLUSTERS):
+    mc = mat(f"mapa_c{ci}", col, rough=0.90)
+    for k in range(n):
+        w = random.uniform(0.055, 0.125); h = random.uniform(0.045, 0.100)
+        box(f"cont_{ci}_{k}",
+            (w, 0.009, h),
+            (PX + cx + random.uniform(-rx, rx),
+             Y1 - 0.162 - ci * 0.0035 - k * 0.00025,
+             1.58 + cz + random.uniform(-rz, rz)),
+            material=mc)
 
-# objetos decorativos y luz practica calida
-cyl("obj_a", 0.058, 0.20, (SX+0.36, SY-0.02, 0.46+0.114), material=M_WOOD_L)
-box("obj_b", (0.17,0.17,0.15), (SX-0.36, SY-0.03, 0.90+0.089), rot=(0,0,0.3), material=M_WOOD)
-cyl("practical_pie",  0.070, 0.02, (SX+0.30, SY-0.04, 1.36), material=M_WOOD)
-cyl("practical", 0.072, 0.21, (SX+0.30, SY-0.04, 1.49), material=M_PRACT)
+# biblioteca blanca (la existente): estantes abiertos abajo, puerta arriba, cajas encima
+BX, BW, BD, BH = 0.70, 0.82, 0.40, 1.96
+box("bib_fondo", (BW, 0.028, BH), (BX, Y1-0.024-BD+BD, BH/2), material=M_WHITE)
+box("bib_fondo2",(BW, 0.028, BH), (BX, Y1-0.04, BH/2), material=M_WHITE)
+box("bib_lat_i", (0.028, BD, BH), (BX-BW/2, Y1-0.04-BD/2, BH/2), material=M_WHITE)
+box("bib_lat_d", (0.028, BD, BH), (BX+BW/2, Y1-0.04-BD/2, BH/2), material=M_WHITE)
+box("bib_techo", (BW, BD, 0.03),  (BX, Y1-0.04-BD/2, BH-0.015), material=M_WHITE)
+box("bib_piso",  (BW, BD, 0.03),  (BX, Y1-0.04-BD/2, 0.015), material=M_WHITE)
+for i, z in enumerate((0.44, 0.88)):
+    box(f"bib_est{i}", (BW-0.06, BD-0.02, 0.026), (BX, Y1-0.04-BD/2, z), material=M_WHITE)
+box("bib_puerta", (BW-0.04, 0.026, 0.62), (BX, Y1-0.04-BD+0.02, 1.58), material=M_WHITE)
+cyl("bib_tirador", 0.007, 0.13, (BX, Y1-0.05-BD, 1.58), rot=(0, math.radians(90), 0), material=M_ALU)
+random.seed(3)
+for i, z in enumerate((0.44, 0.88)):
+    x = BX - BW/2 + 0.05
+    while x < BX + BW/2 - 0.10:
+        w = random.uniform(0.028, 0.052); h = random.uniform(0.19, 0.30)
+        c = random.choice([(0.30,0.05,0.04),(0.04,0.08,0.20),(0.05,0.15,0.08),
+                           (0.34,0.22,0.06),(0.09,0.09,0.10),(0.40,0.33,0.24)])
+        box(f"libro{i}_{x:.2f}", (w, 0.21, h), (x+w/2, Y1-0.14, z+0.013+h/2),
+            rot=(0,0,random.uniform(-0.02,0.02)), material=mat("lib", c, rough=0.78))
+        x += w + random.uniform(0.002, 0.009)
+# cajas sobre la biblioteca, como en la foto
+box("caja_carton1", (0.50, 0.34, 0.26), (BX-0.10, Y1-0.26, BH+0.13), rot=(0,0,math.radians(4)), material=M_CARDB)
+box("caja_carton2", (0.40, 0.28, 0.20), (BX+0.18, Y1-0.24, BH+0.10), rot=(0,0,math.radians(-7)), material=M_CARDB)
+box("caja_azul",    (0.46, 0.32, 0.14), (BX-0.06, Y1-0.26, BH+0.33), rot=(0,0,math.radians(2)), material=M_BLUEBOX)
 
-# cuadro enmarcado sobre la pared de acento
-box("mapa_marco", (1.46, 0.035, 0.98), (-0.74, Y1-0.05, 1.60), material=M_WOOD)
-box("mapa_fondo", (1.37, 0.02, 0.89), (-0.74, Y1-0.074, 1.60), material=M_MAPBG)
-PALETA = [(0.620,0.380,0.225), (0.450,0.250,0.150), (0.720,0.520,0.330),
-          (0.180,0.260,0.380), (0.560,0.310,0.190), (0.300,0.380,0.420)]
-BLOQUES = [(-0.44,  0.24, 0.42, 0.20), ( 0.10,  0.26, 0.52, 0.16),
-           (-0.50, -0.05, 0.30, 0.22), (-0.06, -0.02, 0.34, 0.14),
-           ( 0.38, -0.08, 0.38, 0.26), (-0.28, -0.30, 0.56, 0.15)]
-for i, (dx, dz, w, h) in enumerate(BLOQUES):
-    m = mat(f"arte_{i}", PALETA[i], rough=0.88)
-    box(f"arte_{i}", (w, 0.008, h), (-0.74 + dx, Y1 - 0.086 - i * 0.004, 1.60 + dz), material=m)
+# mueble bajo con la cafetera (el que ya esta)
+CX = 1.46
+box("mueble_bajo", (0.62, 0.42, 0.76), (CX, Y1-0.25, 0.38), material=M_WHITE)
+box("cafetera_base", (0.17, 0.20, 0.10), (CX-0.06, Y1-0.26, 0.81), material=M_BLACK)
+box("cafetera_cuerpo",(0.15, 0.17, 0.24), (CX-0.06, Y1-0.32, 0.98), material=M_BLACK)
+cyl("cafetera_jarra", 0.062, 0.15, (CX-0.06, Y1-0.20, 0.885), material=M_GLASS)
+cyl("botella", 0.035, 0.22, (CX+0.20, Y1-0.24, 0.87), material=mat("bot",(0.72,0.62,0.10),rough=0.35))
 
-# planta
-cyl("maceta", 0.155, 0.32, (SX+0.78, SY-0.02, 0.16), material=M_WOOD_L)
+# planta entre el panel y la biblioteca
+cyl("maceta", 0.145, 0.30, (0.14, Y1-0.32, 0.15), material=M_WOOD_L)
 random.seed(5)
-for i in range(22):
-    a = random.uniform(0, math.tau); r = random.uniform(0.04, 0.34)
-    plane(f"hoja_{i}", (random.uniform(0.14,0.26), random.uniform(0.09,0.15)),
-          (SX+0.78+math.cos(a)*r, SY-0.02+math.sin(a)*r*0.6, 0.42+random.uniform(0.0,0.72)),
+for i in range(20):
+    a = random.uniform(0, math.tau); r = random.uniform(0.04, 0.30)
+    plane(f"hoja_{i}", (random.uniform(0.13,0.24), random.uniform(0.08,0.14)),
+          (0.14+math.cos(a)*r, Y1-0.32+math.sin(a)*r*0.55, 0.40+random.uniform(0.0,0.62)),
           rot=(random.uniform(-1.1,1.1), random.uniform(-0.9,0.9), a), material=M_LEAF)
 
-# ───────────────────────── alfombra ─────────────────────────
-box("alfombra", (2.85, 2.25, 0.022), (-0.10, 0.62, 0.011), material=M_RUG)
+# ───────────────────────── alfombra y butacas ─────────────────────────
+box("alfombra", (2.55, 1.95, 0.020), (0.0, 0.82, 0.010), material=M_RUG)
 
-# ───────────────────────── butacas ─────────────────────────
 def butaca(name, loc, rot_z):
-    parts = []
     g = []
-    g.append(box(f"{name}_asiento", (0.60, 0.58, 0.15), (0, 0, 0.40), material=M_CHAIR))
-    g.append(box(f"{name}_respaldo",(0.60, 0.14, 0.56), (0, -0.25, 0.70),
+    g.append(box(f"{name}_asiento", (0.58, 0.56, 0.15), (0, 0, 0.40), material=M_CHAIR))
+    g.append(box(f"{name}_respaldo",(0.58, 0.14, 0.54), (0, -0.24, 0.69),
                  rot=(math.radians(-9), 0, 0), material=M_CHAIR))
     for sx in (-1, 1):
-        g.append(box(f"{name}_brazo{sx}", (0.10, 0.52, 0.17), (sx*0.31, 0.02, 0.535), material=M_CHAIR))
+        g.append(box(f"{name}_brazo{sx}", (0.10, 0.50, 0.17), (sx*0.30, 0.02, 0.525), material=M_CHAIR))
     for sx in (-1, 1):
         for sy in (-1, 1):
-            g.append(cyl(f"{name}_pata{sx}{sy}", 0.022, 0.34,
-                         (sx*0.24, sy*0.22, 0.165),
+            g.append(cyl(f"{name}_pata{sx}{sy}", 0.021, 0.33, (sx*0.23, sy*0.21, 0.16),
                          rot=(math.radians(sy*7), math.radians(-sx*7), 0), material=M_WOOD))
-    g.append(box(f"{name}_almohadon", (0.30, 0.10, 0.28), (0.13, -0.19, 0.60),
+    g.append(box(f"{name}_almohadon", (0.29, 0.10, 0.27), (0.12, -0.18, 0.59),
                  rot=(math.radians(-14), 0, math.radians(8)), material=M_CUSH))
-    for o in g:
-        bevel(o, 0.035, 5)
+    for o in g: bevel(o, 0.035, 5)
     bpy.ops.object.select_all(action='DESELECT')
     for o in g: o.select_set(True)
     bpy.context.view_layer.objects.active = g[0]
     bpy.ops.object.join()
     ch = bpy.context.object; ch.name = name
-    ch.rotation_euler = (0, 0, rot_z)
-    ch.location = loc
+    ch.rotation_euler = (0, 0, rot_z); ch.location = loc
     return ch
 
-butaca("butaca_invitado",  (-0.92, 0.72, 0), math.radians(-28))
-butaca("butaca_conductor", ( 0.72, 0.72, 0), math.radians( 28))
+butaca("butaca_invitado",  (-0.70, 0.92, 0), math.radians(-30))
+butaca("butaca_conductor", ( 0.70, 0.92, 0), math.radians( 30))
 
-# mesa ratona
-cyl("mesa_tapa", 0.34, 0.045, (-0.10, 0.45, 0.435), material=M_WOOD)
+cyl("mesa_tapa", 0.30, 0.042, (0.0, 0.66, 0.434), material=M_WOOD)
 for a in (0.5, 2.6, 4.7):
-    cyl("mesa_pata", 0.018, 0.43, (-0.10+math.cos(a)*0.24, 0.45+math.sin(a)*0.24, 0.215),
+    cyl("mesa_pata", 0.017, 0.43, (math.cos(a)*0.21, 0.66+math.sin(a)*0.21, 0.215),
         rot=(math.radians(math.sin(a)*8), math.radians(-math.cos(a)*8), 0), material=M_METAL)
-for dx in (-0.13, 0.13):
-    cyl("vaso", 0.035, 0.11, (-0.10+dx, 0.42, 0.513), material=M_GLASS)
-box("libreta", (0.18, 0.24, 0.012), (-0.10, 0.60, 0.464), rot=(0,0,math.radians(9)), material=M_CUSH)
+for dx in (-0.12, 0.12):
+    cyl("vaso", 0.033, 0.10, (dx, 0.63, 0.505), material=M_GLASS)
+box("libreta", (0.17, 0.22, 0.011), (0.0, 0.80, 0.461), rot=(0,0,math.radians(9)), material=M_CUSH)
 
-# ───────────────────────── microfonos con brazo articulado ─────────────────────────
+# ───────────────────────── microfonos ─────────────────────────
 def micro(name, base, tip, mic_rot):
     bx, by, bz = base
-    cyl(f"{name}_mastil", 0.022, 1.30, (bx, by, 0.65), material=M_BLACK)
-    mid = ((bx+tip[0])/2, (by+tip[1])/2, 1.34)
-    d = Vector(tip) - Vector((bx, by, 1.30))
-    L = d.length
-    o = cyl(f"{name}_brazo", 0.016, L, mid, material=M_BLACK)
+    cyl(f"{name}_mastil", 0.021, 1.28, (bx, by, 0.64), material=M_BLACK)
+    d = Vector(tip) - Vector((bx, by, 1.28))
+    o = cyl(f"{name}_brazo", 0.015, d.length, ((bx+tip[0])/2, (by+tip[1])/2, (1.28+tip[2])/2), material=M_BLACK)
     o.rotation_euler = d.to_track_quat('Z','Y').to_euler()
-    m = cyl(f"{name}_mic", 0.031, 0.17, tip, rot=mic_rot, material=M_BLACK)
-    shade_smooth(m)
-    cyl(f"{name}_base", 0.10, 0.03, (bx, by, 0.015), material=M_BLACK)
+    shade_smooth(cyl(f"{name}_mic", 0.030, 0.16, tip, rot=mic_rot, material=M_BLACK))
+    cyl(f"{name}_base", 0.095, 0.03, (bx, by, 0.015), material=M_BLACK)
 
-micro("mic_inv",  (-1.78, 0.30, 0), (-1.02, 0.52, 1.18), (math.radians(58), 0, math.radians(-30)))
-micro("mic_cond", ( 1.58, 0.30, 0), ( 0.82, 0.52, 1.18), (math.radians(58), 0, math.radians( 30)))
+micro("mic_inv",  (-1.48, 0.55, 0), (-0.80, 0.72, 1.16), (math.radians(58), 0, math.radians(-28)))
+micro("mic_cond", ( 1.48, 0.55, 0), ( 0.80, 0.72, 1.16), (math.radians(58), 0, math.radians( 28)))
 
-# ───────────────────────── camaras en tripode ─────────────────────────
+# ───────────────────────── camaras ─────────────────────────
 def camara(name, loc, target, altura=1.22):
     x, y = loc
     for a in (0.6, 2.7, 4.8):
-        cyl(f"{name}_pata{a}", 0.016, altura*1.06,
-            (x+math.cos(a)*0.24, y+math.sin(a)*0.24, altura*0.53),
+        cyl(f"{name}_pata{a}", 0.015, altura*1.06,
+            (x+math.cos(a)*0.22, y+math.sin(a)*0.22, altura*0.53),
             rot=(math.radians(math.sin(a)*13), math.radians(-math.cos(a)*13), 0), material=M_METAL)
-    cyl(f"{name}_columna", 0.026, 0.22, (x, y, altura+0.06), material=M_METAL)
-    body = box(f"{name}_cuerpo", (0.135, 0.105, 0.098), (x, y, altura+0.21), material=M_BLACK)
-    lens = cyl(f"{name}_lente", 0.047, 0.135, (x, y-0.11, altura+0.21),
-               rot=(math.radians(90),0,0), material=M_BLACK)
+    cyl(f"{name}_columna", 0.024, 0.20, (x, y, altura+0.06), material=M_METAL)
+    body = box(f"{name}_cuerpo", (0.130, 0.100, 0.094), (x, y, altura+0.20), material=M_BLACK)
+    lens = cyl(f"{name}_lente", 0.045, 0.13, (x, y-0.10, altura+0.20), rot=(math.radians(90),0,0), material=M_BLACK)
     shade_smooth(lens)
-    d = Vector((target[0]-x, target[1]-y, 0))
-    ang = math.atan2(d.y, d.x) + math.pi/2
-    for o in (body, lens):
-        o.rotation_euler = (o.rotation_euler[0], o.rotation_euler[1], ang)
-        o.location = (x + math.sin(-ang)*0.0, y, o.location[2])
+    ang = math.atan2(target[1]-y, target[0]-x) + math.pi/2
     bpy.ops.object.select_all(action='DESELECT')
     body.select_set(True); lens.select_set(True)
     bpy.context.view_layer.objects.active = body
     bpy.ops.object.join()
     cam = bpy.context.object
-    cam.rotation_euler = (0, 0, ang)
-    cam.location = (x, y, altura + 0.21)
+    cam.rotation_euler = (0, 0, ang); cam.location = (x, y, altura + 0.20)
 
-camara("camA", (-0.14, -1.12), (-0.10, 0.72), 1.32)   # plano general
-camara("camB", (-1.86, -0.34), (-0.92, 0.72), 1.18)   # primer plano invitado
-camara("camC", ( 1.88,  0.22), ( 0.72, 0.72), 1.18)   # primer plano conductor
+camara("camA", ( 0.00, -0.72), ( 0.00, 0.92), 1.30)
+camara("camB", (-1.02, -0.22), (-0.70, 0.92), 1.16)
+camara("camC", ( 1.02, -0.22), ( 0.70, 0.92), 1.16)
 
-# ───────────────────────── iluminacion de set ─────────────────────────
-def softbox(name, loc, target, w=0.78, h=0.78, power=150):
+# ───────────────────────── iluminacion ─────────────────────────
+def softbox(name, loc, target, w=0.72, h=0.72, power=120):
     x, y, z = loc
     for a in (0.7, 2.8, 4.9):
-        cyl(f"{name}_pata{a}", 0.014, z*0.62,
-            (x+math.cos(a)*0.26, y+math.sin(a)*0.26, z*0.31),
+        cyl(f"{name}_pata{a}", 0.013, z*0.60, (x+math.cos(a)*0.24, y+math.sin(a)*0.24, z*0.30),
             rot=(math.radians(math.sin(a)*15), math.radians(-math.cos(a)*15), 0), material=M_METAL)
-    cyl(f"{name}_mastil", 0.020, z*0.92, (x, y, z*0.46), material=M_METAL)
+    cyl(f"{name}_mastil", 0.019, z*0.92, (x, y, z*0.46), material=M_METAL)
     d = Vector((target[0]-x, target[1]-y, target[2]-z)); d.normalize()
     rot = d.to_track_quat('-Z','Y').to_euler()
-    sb = box(f"{name}_caja", (w, h, 0.14), (x, y, z), rot=rot, material=M_BLACK)
-    face = plane(f"{name}_difusor", (w*0.94, h*0.94),
-                 (x+d.x*0.085, y+d.y*0.085, z+d.z*0.085), rot=rot, material=M_SOFTBOX)
+    box(f"{name}_caja", (w, h, 0.13), (x, y, z), rot=rot, material=M_BLACK)
+    plane(f"{name}_dif", (w*0.94, h*0.94), (x+d.x*0.08, y+d.y*0.08, z+d.z*0.08), rot=rot, material=M_SOFTBOX)
     lt = bpy.data.lights.new(f"{name}_luz", 'AREA')
-    lt.energy = power; lt.size = w*0.92; lt.shape = 'SQUARE'
-    lt.color = (1.0, 0.955, 0.895)
+    lt.energy = power; lt.size = w*0.92; lt.shape = 'SQUARE'; lt.color = (1.0, 0.955, 0.895)
     ob = bpy.data.objects.new(f"{name}_luz", lt); scene.collection.objects.link(ob)
     ob.location = (x+d.x*0.10, y+d.y*0.10, z+d.z*0.10); ob.rotation_euler = rot
 
-softbox("key_inv",  (-1.94, -0.46, 1.95), (-0.92, 0.72, 1.05), 0.82, 0.82, 118)
-softbox("key_cond", ( 1.90, -0.60, 1.95), ( 0.72, 0.72, 1.05), 0.82, 0.82, 100)
+softbox("key_inv",  (-1.52, -0.18, 1.98), (-0.70, 0.92, 1.05), 0.62, 0.62, 105)
+softbox("key_cond", ( 1.54, -0.22, 1.98), ( 0.70, 0.92, 1.05), 0.62, 0.62,  92)
 
-# luz de recorte (desde atras, sobre el hombro)
-lt = bpy.data.lights.new("recorte", 'SPOT'); lt.energy = 130; lt.spot_size = math.radians(58)
+lt = bpy.data.lights.new("recorte", 'SPOT'); lt.energy = 110; lt.spot_size = math.radians(58)
 lt.spot_blend = 0.55; lt.color = (1.0, 0.90, 0.80); lt.shadow_soft_size = 0.12
 ob = bpy.data.objects.new("recorte", lt); scene.collection.objects.link(ob)
-ob.location = (1.75, 1.60, 2.45)
-ob.rotation_euler = Vector((-0.80-1.75, 0.80-1.60, 1.10-2.45)).to_track_quat('-Z','Y').to_euler()
-cyl("recorte_mastil", 0.018, 2.3, (1.95, 1.62, 1.15), material=M_METAL)
+ob.location = (1.52, 1.78, 2.52)
+ob.rotation_euler = Vector((-0.65-1.52, 0.95-1.78, 1.10-2.52)).to_track_quat('-Z','Y').to_euler()
+cyl("recorte_mastil", 0.017, 2.4, (1.66, 1.82, 1.20), material=M_METAL)
 
-# luz RGB de fondo (lava la pared de acento)
-box("rgb_barra", (0.09, 0.09, 1.05), (-1.72, Y1-0.16, 0.55), material=M_RGB)
-lt = bpy.data.lights.new("rgb", 'AREA'); lt.energy = 28; lt.size = 0.9
-lt.color = (0.24, 0.72, 0.82)
+box("rgb_barra", (0.08, 0.08, 0.95), (-1.62, Y1-0.30, 0.50), material=M_RGB)
+lt = bpy.data.lights.new("rgb", 'AREA'); lt.energy = 24; lt.size = 0.85; lt.color = (0.24, 0.72, 0.82)
 ob = bpy.data.objects.new("rgb", lt); scene.collection.objects.link(ob)
-ob.location = (-1.62, Y1-0.30, 0.85); ob.rotation_euler = (math.radians(74), 0, math.radians(-96))
+ob.location = (-1.52, Y1-0.42, 0.80); ob.rotation_euler = (math.radians(74), 0, math.radians(-96))
 
-# luz de ventana (dia nublado de Buenos Aires)
-lt = bpy.data.lights.new("ventana", 'AREA'); lt.energy = 165
-lt.shape = 'RECTANGLE'; lt.size = 2.6; lt.size_y = 1.9
-lt.color = (0.80, 0.86, 1.0)
+lt = bpy.data.lights.new("ventana", 'AREA'); lt.energy = 150
+lt.shape = 'RECTANGLE'; lt.size = 2.7; lt.size_y = 1.9; lt.color = (0.80, 0.86, 1.0)
 ob = bpy.data.objects.new("ventana", lt); scene.collection.objects.link(ob)
-ob.location = (X0+0.22, -0.20, 1.45); ob.rotation_euler = (0, math.radians(90), 0)
+ob.location = (X0+0.22, 0.15, 1.46); ob.rotation_euler = (0, math.radians(90), 0)
 
-# ambiente general
-world = bpy.data.worlds.new("W"); scene.world = world  # global
+world = bpy.data.worlds.new("W"); scene.world = world
 world.use_nodes = True
 world.node_tree.nodes["Background"].inputs[0].default_value = (0.072, 0.080, 0.098, 1)
 world.node_tree.nodes["Background"].inputs[1].default_value = 0.12
 
-# ───────────────────────── paneles acusticos (pared derecha) ─────────────────────────
+# ───────────────── paneles acusticos (pared derecha) ─────────────────
 for i in range(3):
     for j in range(2):
-        box(f"panel_{i}{j}", (0.035, 0.58, 0.58),
-            (X1-0.03, -1.35+i*0.66, 1.02+j*0.66),
-            material=M_FOAM)
+        box(f"panel_ac{i}{j}", (0.032, 0.54, 0.54), (X1-0.03, 0.52-i*0.60, 1.10+j*0.60), material=M_FOAM)
 
-# ───────────────────────── mesa tecnica (detras de camara) ─────────────────────────
-box("mesa_tec_tapa", (1.35, 0.55, 0.035), (-1.05, -2.20, 0.735), material=M_WHITE)
-for sx in (-1,1):
-    for sy in (-1,1):
-        cyl("mesa_tec_pata", 0.021, 0.72, (-1.05+sx*0.60, -2.20+sy*0.22, 0.36), material=M_ALU)
-box("consola", (0.34, 0.24, 0.055), (-1.43, -2.18, 0.78), rot=(0,0,math.radians(-6)), material=M_BLACK)
-box("notebook_base", (0.33, 0.23, 0.018), (-0.91, -2.14, 0.762), material=M_METAL)
-box("notebook_tapa", (0.33, 0.015, 0.22), (-0.91, -2.25, 0.875), rot=(math.radians(-16),0,0), material=M_SCREEN)
-box("monitor_ref", (0.42, 0.028, 0.26), (-0.39, -2.32, 0.98), rot=(0,0,math.radians(-22)), material=M_SCREEN)
-cyl("monitor_pie", 0.055, 0.10, (-0.39, -2.30, 0.80), material=M_BLACK)
+# ───────────────── muebles existentes reubicados ─────────────────
+# sofa gris -> area de espera contra la pared derecha
+SFX, SFY = X1-0.46, -1.10
+box("sofa_base", (0.82, 1.85, 0.34), (SFX, SFY, 0.20), material=M_SOFA)
+box("sofa_resp", (0.20, 1.85, 0.44), (X1-0.13, SFY, 0.56), rot=(0, math.radians(7), 0), material=M_SOFA)
+for sy in (-1, 1):
+    box("sofa_brazo", (0.82, 0.16, 0.22), (SFX, SFY+sy*0.845, 0.48), material=M_SOFA)
+for sx in (-1, 1):
+    for sy in (-1, 1):
+        cyl("sofa_pata", 0.024, 0.14, (SFX+sx*0.30, SFY+sy*0.74, 0.07), material=M_WOOD)
 
-# sofa gris existente (reubicado como area de espera, contra la pared de atras)
-box("sofa_base",  (1.85, 0.82, 0.34), (1.15, -2.14, 0.20), material=M_SOFA)
-box("sofa_resp",  (1.85, 0.20, 0.44), (1.15, -2.45, 0.56), rot=(math.radians(-7),0,0), material=M_SOFA)
-for sx in (-1,1):
-    box("sofa_brazo", (0.16, 0.82, 0.22), (1.15+sx*0.845, -2.14, 0.48), material=M_SOFA)
-for sx in (-1,1):
-    for sy in (-1,1):
-        cyl("sofa_pata", 0.025, 0.14, (1.15+sx*0.74, -2.14+sy*0.30, 0.07), material=M_WOOD)
+# escritorio existente (tapa clara, patas cromadas) -> mesa tecnica, detras de camara
+DX, DY = -0.75, Y0+0.42
+box("esc_tapa", (1.25, 0.62, 0.032), (DX, DY, 0.735), material=M_WHITE)
+for sx in (-1, 1):
+    for sy in (-1, 1):
+        cyl("esc_pata", 0.022, 0.72, (DX+sx*0.56, DY+sy*0.24, 0.36), material=M_ALU)
+box("consola", (0.32, 0.22, 0.05), (DX-0.36, DY, 0.776), rot=(0,0,math.radians(-6)), material=M_BLACK)
+box("note_base", (0.31, 0.22, 0.017), (DX+0.12, DY+0.03, 0.760), material=M_METAL)
+box("note_tapa", (0.31, 0.014, 0.21), (DX+0.12, DY-0.08, 0.870), rot=(math.radians(-16),0,0), material=M_SCREEN)
+box("monitor_ref", (0.40, 0.026, 0.25), (DX+0.52, DY-0.14, 0.97), rot=(0,0,math.radians(-24)), material=M_SCREEN)
+cyl("monitor_pie", 0.05, 0.10, (DX+0.52, DY-0.12, 0.79), material=M_BLACK)
 
-# cartel "GRABANDO" junto a la puerta
-box("cartel", (0.02, 0.30, 0.16), (X1-0.02, -2.05, 1.62), material=mat("cartel",(0.45,0.03,0.03),rough=0.6))
+box("cartel_grabando", (0.02, 0.28, 0.15), (X1-0.02, -1.95, 1.58),
+    material=mat("cartel",(0.45,0.03,0.03), rough=0.6))
 
 # ───────────────────────── camara de render ─────────────────────────
 cam_data = bpy.data.cameras.new("render_cam")
 cam_data.lens = 20
 cam_data.dof.use_dof = True
-cam_data.dof.focus_distance = 3.90
-cam_data.dof.aperture_fstop = 5.0
+cam_data.dof.focus_distance = 3.75
+cam_data.dof.aperture_fstop = 5.6
 cam = bpy.data.objects.new("render_cam", cam_data); scene.collection.objects.link(cam)
+
 VIEW = sys.argv[5] if len(sys.argv) > 5 else "wide"
 
 if VIEW == "planta":
-    # ── vista en planta con etiquetas, para armar el set ──
     for _o in bpy.data.objects:
         if _o.name.startswith(("cielorraso", "cortina", "riel")):
             _o.hide_render = True
     M_TXT = mat("texto", (0.02, 0.05, 0.12), rough=0.9, emit=(0.02, 0.05, 0.12), emit_str=1.4)
-    def etiqueta(txt, loc, size=0.135):
-        bpy.ops.object.text_add(location=(loc[0], loc[1], 2.55))
+    def etiqueta(txt, loc, size=0.10):
+        bpy.ops.object.text_add(location=(loc[0], loc[1], 2.60))
         o = bpy.context.object
         o.data.body = txt; o.data.size = size
-        o.data.align_x = 'CENTER'; o.data.align_y = 'CENTER'
-        o.data.extrude = 0.004
+        o.data.align_x = 'CENTER'; o.data.align_y = 'CENTER'; o.data.extrude = 0.004
         o.data.materials.append(M_TXT)
-        return o
-    ETIQUETAS = [
-        ("BUTACA INVITADO", (-0.92, 0.16), 0.100), ("BUTACA CONDUCTOR", (0.74, 0.16), 0.100),
-        ("MESA", (-0.10, 0.45), 0.080),
-        ("ALFOMBRA", (-0.10, -0.26), 0.090),
-        ("CAM A  general", (-0.14, -1.64), 0.100),
-        ("CAM B  invitado", (-1.28, -0.64), 0.092),
-        ("CAM C  conductor", (1.38, 0.64), 0.092),
-        ("LUZ 1", (-1.95, -1.06), 0.088), ("LUZ 2", (1.92, -1.26), 0.088),
-        ("RECORTE", (1.52, 1.60), 0.082), ("RGB", (-1.74, 1.56), 0.082),
-        ("MIC", (-1.78, -0.14), 0.082), ("MIC", (1.58, -0.14), 0.082),
-        ("BIBLIOTECA", (1.30, 1.00), 0.092), ("CUADRO", (-0.74, 1.62), 0.082),
-        ("VENTANAL", (-1.96, 0.42), 0.088),
-        ("PANELES ACUST.", (1.92, -0.52), 0.082),
-        ("MESA TECNICA", (-1.05, -1.72), 0.090),
-        ("SOFA / ESPERA", (1.15, -1.66), 0.090),
-        ("PLANTA", (2.06, 0.72), 0.080),
-    ]
-    for e in ETIQUETAS:
-        etiqueta(e[0], e[1], e[2] if len(e) > 2 else 0.135)
-    # luz cenital plana
+    for e in [
+        ("BUTACA INVITADO", (-0.70, 0.30), 0.093), ("BUTACA CONDUCTOR", (0.70, 0.30), 0.093),
+        ("MESA", (0.0, 0.66), 0.072),
+        ("ALFOMBRA", (0.0, 0.02), 0.082),
+        ("PANEL + MAPA", (-0.72, 1.74), 0.082),
+        ("BIBLIOTECA", (0.70, 1.56), 0.078),
+        ("CAFETERA", (1.58, 1.34), 0.068),
+        ("CAM A", (0.0, -0.80), 0.090),
+        ("CAM B", (-0.86, -0.46), 0.080), ("CAM C", (0.86, -0.46), 0.080),
+        ("LUZ 1", (-1.48, -0.66), 0.078), ("LUZ 2", (1.46, -0.78), 0.078),
+        ("MIC", (-1.48, 0.34), 0.072), ("MIC", (1.48, 0.34), 0.072),
+        ("RECORTE", (1.26, 1.92), 0.066), ("RGB", (-1.62, 1.64), 0.070),
+        ("VENTANAL", (-1.42, -0.98), 0.076),
+        ("PANELES ACUST.", (1.38, 0.60), 0.064),
+        ("ESCRITORIO / MESA TECNICA", (-0.75, -1.28), 0.078),
+        ("SOFA - ESPERA", (1.16, -1.32), 0.074),
+    ]:
+        etiqueta(e[0], e[1], e[2])
     lt = bpy.data.lights.new("cenital", 'SUN'); lt.energy = 4.2; lt.angle = 0.6
     ob = bpy.data.objects.new("cenital", lt); scene.collection.objects.link(ob)
     ob.location = (0, 0, 6); ob.rotation_euler = (0, 0, 0)
     world.node_tree.nodes["Background"].inputs[0].default_value = (0.55, 0.58, 0.62, 1)
     world.node_tree.nodes["Background"].inputs[1].default_value = 0.85
-    cam_data.type = 'ORTHO'
-    cam_data.ortho_scale = 5.32
-    cam_data.dof.use_dof = False
-    cam.location = (0.0, -0.40, 6.0)
-    cam.rotation_euler = (0, 0, 0)
+    cam_data.type = 'ORTHO'; cam_data.ortho_scale = 4.62; cam_data.dof.use_dof = False
+    cam.location = (0.0, 0.0, 6.0); cam.rotation_euler = (0, 0, 0)
     scene.view_settings.view_transform = 'Standard'
     scene.view_settings.exposure = 0.0
-elif VIEW == "camA":
-    for _o in bpy.data.objects:
-        if _o.name.startswith("camA"):
-            _o.hide_render = True
-    cam_data.lens = 24
-    cam_data.dof.focus_distance = 1.95
-    cam_data.dof.aperture_fstop = 4.0
-    cam.location = (-0.14, -1.12, 1.51)
-    look = Vector((-0.10, 0.72, 0.88)) - Vector(cam.location)
-    cam.rotation_euler = look.to_track_quat('-Z','Y').to_euler()
 else:
-    cam.location = (1.26, -2.44, 1.86)
-    look = Vector((-0.40, 0.88, 0.94)) - Vector(cam.location)
+    # mismo punto de vista que la foto: desde la puerta, ventanal a la izquierda
+    cam.location = (-0.56, -2.02, 2.12)
+    look = Vector((0.16, 1.24, 1.08)) - Vector(cam.location)
     cam.rotation_euler = look.to_track_quat('-Z','Y').to_euler()
+    scene.view_settings.view_transform = 'AgX'
+    scene.view_settings.look = 'AgX - Medium High Contrast'
+    scene.view_settings.exposure = -1.05
 scene.camera = cam
 
-# ───────────────────────── render ─────────────────────────
 scene.render.engine = 'CYCLES'
 scene.cycles.device = 'CPU'
 scene.cycles.samples = SAMPLES
@@ -436,13 +436,7 @@ scene.cycles.caustics_reflective = False
 scene.cycles.caustics_refractive = False
 scene.render.resolution_x = RES_X
 scene.render.resolution_y = RES_Y
-scene.render.resolution_percentage = 100
-scene.render.film_transparent = False
 scene.render.image_settings.file_format = 'PNG'
-scene.view_settings.view_transform = 'AgX'
-scene.view_settings.look = 'AgX - Medium High Contrast'
-scene.view_settings.exposure = -1.05
 scene.render.filepath = OUT
-
 bpy.ops.render.render(write_still=True)
 print("RENDER OK ->", OUT)
